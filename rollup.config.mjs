@@ -19,18 +19,17 @@ const s_TYPHONJS_MODULE_LIB = false;
 
 // Creates a standard configuration for PostCSS with autoprefixer & postcss-preset-env.
 const postcssMain = postcssConfig({
-   extract: 'template-svelte-esm.css',
+   extract: "scabard-connect.css",
    compress: s_COMPRESS,
-   sourceMap: s_SOURCEMAPS
+   sourceMap: s_SOURCEMAPS,
 });
 
 const s_RESOLVE_CONFIG = {
    browser: true,
-   dedupe: ['svelte']
-}
+   dedupe: ["svelte"],
+};
 
-export default () =>
-{
+export default () => {
    // Defines potential output plugins to use conditionally if the .env file indicates the bundles should be
    // minified / mangled.
    const outputPlugins = s_COMPRESS ? [terser(terserConfig())] : [];
@@ -39,22 +38,24 @@ export default () =>
    const sourcemap = s_SOURCEMAPS;
 
    return [
-      {  // The main module bundle
+      {
+         // The main module bundle
          input: `src/init.js`,
          output: {
-            file: `dist/template-svelte-esm.js`,
-            format: 'es',
+            file: `dist/scabard-connect.js`,
+            format: "es",
             plugins: outputPlugins,
-            sourcemap
+            sourcemap,
          },
          plugins: [
             svelte({
                preprocess: preprocess(),
-               onwarn: (warning, handler) =>
-               {
+               onwarn: (warning, handler) => {
                   // Suppress `a11y-missing-attribute` for missing href in <a> links.
                   // Foundry doesn't follow accessibility rules.
-                  if (warning.message.includes(`<a> element should have an href attribute`)) { return; }
+                  if (warning.message.includes(`<a> element should have an href attribute`)) {
+                     return;
+                  }
 
                   // Let Rollup handle all other warnings normally.
                   handler(warning);
@@ -69,12 +70,13 @@ export default () =>
             s_TYPHONJS_MODULE_LIB && typhonjsRuntime(),
 
             babel({
-               babelHelpers: 'bundled',
+               babelHelpers: "bundled",
                presets: [
-                  ['@babel/preset-env', { bugfixes: true, shippedProposals: true, targets: { esmodules: true } }]
-               ]
-            })
-         ]
-      }
+                  ["@babel/preset-env", { bugfixes: true, shippedProposals: true, targets: { esmodules: true } }],
+               ],
+            }),
+         ],
+      },
    ];
 };
+

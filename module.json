@@ -1,12 +1,16 @@
 {
-  "name": "template-svelte-esm",
-  "title": "Template Svelte (ESM)",
-  "description": "Provides a bare-bones Foundry module template repo to get set up with using the TyphonJS Runtime Library and Svelte with ES Modules.",
-  "author": "Michael Leahy (TyphonJS) - MLeahy#4299",
+  "name": "scabard-connect",
+  "title": "Scabard Connect",
+  "description": "Provides a way to import Scabard Documents into Foundry",
+  "author": "programmingdad",
   "authors": [
     {
       "name": "Michael Leahy (TyphonJS) - MLeahy#4299",
       "url": "https://www.typhonjs.io"
+    },
+    {
+      "name": "programmingdad",
+      "url": "https://github.com/professorx00/"
     }
   ],
   "url": "https://github.com/typhonjs-fvtt-demo/template-svelte-esm",
@@ -16,12 +20,8 @@
   "version": "0.0.0",
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "9",
-  "esmodules": [
-    "./dist/template-svelte-esm.js"
-  ],
-  "styles": [
-    "./dist/template-svelte-esm.css"
-  ],
+  "esmodules": ["./dist/scabard-connect.js"],
+  "styles": ["./dist/scabard-connect.css"],
   "languages": [
     {
       "lang": "en",
@@ -37,4 +37,5 @@
   "protected": false,
   "coreTranslation": false,
   "library": false
+
 }
