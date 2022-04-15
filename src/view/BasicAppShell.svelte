@@ -1,11 +1,37 @@
 <script>
    import { ApplicationShell }   from '@typhonjs-fvtt/runtime/svelte/component/core';
-
-   function onClick(){
-      console.log("Button Clicked")
-   }
-
+   import LoginForm from '../components/LoginForm.svelte';
+   import CampaignDetails from '../components/CampaignDetails.svelte';
+   import CamapignsForm from '../components/CamapignsForm.svelte';
+   import UserStores from '../stores/UserStores'
+import { onMount } from 'svelte';
    export let elementRoot;
+
+   export let username = '';
+   export let accessKey = '';
+   export let campaigns = null;
+   export let step = 0;
+
+   export let selectedCampaign;
+   export let selectedCampaignDetails;
+   export let dataStore;
+
+   UserStores.subscribe((value)=>{
+    dataStore = value
+    step = value.step
+    username = value.username
+    accessKey = value.accessKey
+    campaigns = value.campaigns
+    selectedCampaign= value.selectedCampaign
+    selectedCampaignDetails =value.selectedCampaignDetails
+   })
+
+   onMount(()=>{
+      UserStores.set({step: 0, username: '', accessKey: '', campaigns: null, selectedCampaign: null, selectedCampaignDetails: null})
+   })
+
+
+
 </script>
 
 <!-- This is necessary for Svelte to generate accessors TRL can access for `elementRoot` -->
@@ -14,23 +40,43 @@
 <!-- ApplicationShell provides the popOut / application shell frame, header bar, content areas -->
 <!-- ApplicationShell exports `elementRoot` which is the outer application shell element -->
 <ApplicationShell bind:elementRoot>
-   <main>
+   <div class="containerDiv">
+   <nav>
       <h1>Scabard Connect</h1>
-      <button class="testButton" on:click={onClick}>Test2</button>
+   </nav>
+   <main>
+       {#if dataStore.step === 0 }  
+         <LoginForm />
+      {/if}
+      {#if dataStore.step === 1}
+         <CamapignsForm />
+      {/if}
+      {#if dataStore.step === 2}
+      <CampaignDetails />
+      {/if} 
    </main>
+</div>
 </ApplicationShell>
 
 <style lang="scss">
-   main {
-      text-align: center;
+   .containerDiv{
+      height: 100%;
+      width: 100%;
       display: flex;
       flex-direction: column;
-      height: 500;
+      justify-content: center;
    }
-   .testButton {
-      width: 160px;
-      border: 10px;
-      border-radius: 10px;
-      box-shadow: 20px;
+   main {
+      display: flex;
+      height: "auto";
+      width: "auto";
+      margin: 0 0;
    }
+   nav{
+      text-align: center;
+      height: 50px;
+      width: 600;
+      align-items: center;
+   }
+  
 </style>

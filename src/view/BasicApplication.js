@@ -14,8 +14,9 @@ export default class BasicApplication extends SvelteApplication
    {
       return foundry.utils.mergeObject(super.defaultOptions, {
          title: "ScabardConnect.title", // Automatically localized from `lang/en.json`.
-         width: 500,
-         height: 500,
+         width: 700,
+         height: "auto",
+         scrollY: [".scabard-container"],
 
          svelte: {
             class: BasicAppShell,
