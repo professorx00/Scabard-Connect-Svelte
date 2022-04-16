@@ -1,11 +1,16 @@
 <script>
     	import { scale, fade } from 'svelte/transition';
+        import { createEventDispatcher } from 'svelte'
         import { expoInOut } from 'svelte/easing'; 
         export let item; 
-        
-    const handleJournalClick = async (item)=>{
-        console.log(item)
-    }
+        const dispatch = createEventDispatcher();
+        const handleClick = (item)=>{
+            console.log("click before")
+            dispatch("froggie", {item:item})
+        }
+
+
+ 
     const handleScabardClick = async (item)=>{
         window.open(`https://www.scabard.com/pbs${item.uri}`);
     } 
@@ -16,7 +21,7 @@
                     {item.name}
                 </div>
                 <div class="buttons">
-                    <div on:click={()=>{handleJournalClick(item)}} class="button tooltip"><img src="modules/scabard-connect/public/images/journal.png" class="buttonImg" alt="Journal"><span class="tooltiptext">Import a Journal</span></div>
+                    <div on:click={()=>dispatch("froggie",{item:item})} class="button tooltip"><img src="modules/scabard-connect/public/images/journal.png" class="buttonImg" alt="Journal"><span class="tooltiptext">Import a Journal</span></div>
                     <div on:click={()=>{handleScabardClick(item)}} class="button tooltip"><img src="modules/scabard-connect/public/images/favicon.ico" class="buttonImg" alt="Scabard"><span class="tooltiptext">Open on Scabard</span></div>
                 </div>
             </div>

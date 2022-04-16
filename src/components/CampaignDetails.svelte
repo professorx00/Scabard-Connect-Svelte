@@ -66,26 +66,31 @@ import { onMount } from 'svelte';
         notesData = selectedCampaignDetails.rows.filter((item)=>item.concept==="Note")
     })
 
+       const handleJournalClick = async (e) => {
+        // const data = await getArticleData(item.uri)
+        console.log(accessKey, username, e.detail.item)
+    }
+
 </script>
 
     <div class="main">
     <Tabs {tabs} {activeTab} on:tabChange={tabChange}/>
     {#if activeTab==="Adventures"}
-        <ConceptCards data={adventuresData}/>
+        <ConceptCards data={adventuresData} on:froggie={(e)=>handleJournalClick(e)} />
     {:else if activeTab==="Characters"}
-        <ConceptCards data={characterData}/>
+        <ConceptCards data={characterData} on:froggie={(e)=>handleJournalClick(e)} />
     {:else if activeTab==="Events"}
-        <ConceptCards data={eventData}/>
+        <ConceptCards data={eventData} on:froggie={(e)=>handleJournalClick(e)} />
     {:else if activeTab==="Groups"}
-        <ConceptCards data={groupData}/>
+        <ConceptCards data={groupData} on:froggie={(e)=>handleJournalClick(e)} />
     {:else if activeTab==="Items"}
-        <ConceptCards data={itemsData}/>
+        <ConceptCards data={itemsData} on:froggie={(e)=>handleJournalClick(e)} />
     {:else if activeTab==="Places"}
-        <ConceptCards data={placesData}/>
+        <ConceptCards data={placesData} on:froggie={(e)=>handleJournalClick(e)} />
     {:else if activeTab==="Vehicles"}
-        <ConceptCards data={vehiclesData}/>
+        <ConceptCards data={vehiclesData} on:froggie={(e)=>handleJournalClick(e)} />
     {:else if activeTab==="Notes"}
-        <ConceptCards data={notesData}/>
+        <ConceptCards data={notesData} on:froggie={(e)=>handleJournalClick(e)} />
     {/if}
 </div>
 

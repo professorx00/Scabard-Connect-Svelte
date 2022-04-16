@@ -1,8 +1,10 @@
 <script>
+    import { createEventDispatcher } from 'svelte'
     import SearchBar from '../shared/SeachBar.svelte'
     import Card from '../shared/Card.svelte';
     import NoResults from "./NoResults.svelte";
     export let data;
+    const dispatch = createEventDispatcher();
 
     // For Search input
     let filterResults = [];
@@ -22,7 +24,7 @@
         <NoResults />
     {:else if filterResults.length >0}
         {#each filterResults as item }
-            <Card bind:item />
+            <Card bind:item on:froggie/>
         {/each}
     {:else}
         {#each data as item }
