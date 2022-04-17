@@ -4,7 +4,6 @@
     import Card from '../shared/Card.svelte';
     import NoResults from "./NoResults.svelte";
     export let data;
-    const dispatch = createEventDispatcher();
 
     // For Search input
     let filterResults = [];
@@ -15,6 +14,8 @@
             return item.name.toLowerCase().includes(searchTerm.toLowerCase());
         })
     }
+
+    
 
 </script>
 

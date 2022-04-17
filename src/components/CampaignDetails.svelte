@@ -66,31 +66,93 @@ import { onMount } from 'svelte';
         notesData = selectedCampaignDetails.rows.filter((item)=>item.concept==="Note")
     })
 
-       const handleJournalClick = async (e) => {
-        // const data = await getArticleData(item.uri)
-        console.log(accessKey, username, e.detail.item)
-    }
+       document.addEventListener("froggie", (async e=>{
+            //Retrieves the Data
+            const item = e.detail.item
+            const response = await axios(`https://www.scabard.com/api/v0${item.uri}`,{ headers: { username: username, accessKey: accessKey }})
+            console.log(response.data)
+            const data = response.data
+            const uri = item.uri;
+            const id =  item.uri.split('/')[4]
+            const concept = item.uri.split("/")[3]
+            // Checks If there is a folder if there is returns else return new
+            let folder = await _findFolder(concept, id)
+            console.log(folder)
+            if(!folder){
+                console.log("creating Folder")
+                folder = await Folder.create({
+                    name: `Scabard ${concept}`,
+                    type: 'JournalEntry',
+                    flags: {"scabard": concept}
+                })
+            }
+            console.log(folder)
 
+            const folderid = "";
+            //Creates a new Journal Entry which I can render
+            let entry = game.journal.find(e => {
+                if(e.data.flags.scabard){
+                    return e.data.flags.scabard.id === id
+                }
+                });
+            if(entry) return await _updateExistingEntry(entry, data,id,uri, folder.id )
+            entry = await JournalEntry.create({
+                id: id,
+                name: data.main.name,
+                content: data.main.description,
+                img: data.main.imageURL,
+                flags: {"scabard": { id: id, uri: uri}},
+                folder: folder.id
+            }, {});
+     
+            return entry;          
+       }))
+
+    async function _findFolder(concept, id){
+        const folders = game.folders.filter(f => (f.data.type === "JournalEntry") && f.data.flags["scabard"]);
+        const filteredFolders = folders.filter((folder)=>folder.data.flags.scabard===concept);
+        return filteredFolders[0] ? filteredFolders[0] : null;
+    }
+    async function _updateExistingEntry(entry, data, id, uri, folder) {
+  /**
+   * A hook event that fires when the user is updating an existing JournalEntry from a WorldAnvil article.
+   * @function ScabardUpdateJournalEntry
+   * @memberof hookEvents
+   * @param {JournalEntry} entry            The JournalEntry document being updated
+   * @param {Object} data              Scabard Document Object
+   */
+  Hooks.callAll(`ScabardUpdateJournalEntry`, entry, id, uri);
+
+  // Update the entry
+  await entry.update({
+    id:id,
+    name: data.main.name,
+    content: data.main.description,
+    img: data.main.imageURL,
+    "scabard": { id: id, uri: uri},
+    folder: folder
+  });
+}
 </script>
 
     <div class="main">
     <Tabs {tabs} {activeTab} on:tabChange={tabChange}/>
     {#if activeTab==="Adventures"}
-        <ConceptCards data={adventuresData} on:froggie={(e)=>handleJournalClick(e)} />
+        <ConceptCards data={adventuresData} on:froggie />
     {:else if activeTab==="Characters"}
-        <ConceptCards data={characterData} on:froggie={(e)=>handleJournalClick(e)} />
+        <ConceptCards data={characterData} on:froggie />
     {:else if activeTab==="Events"}
-        <ConceptCards data={eventData} on:froggie={(e)=>handleJournalClick(e)} />
+        <ConceptCards data={eventData} on:froggie />
     {:else if activeTab==="Groups"}
-        <ConceptCards data={groupData} on:froggie={(e)=>handleJournalClick(e)} />
+        <ConceptCards data={groupData} on:froggie />
     {:else if activeTab==="Items"}
-        <ConceptCards data={itemsData} on:froggie={(e)=>handleJournalClick(e)} />
+        <ConceptCards data={itemsData} on:froggie />
     {:else if activeTab==="Places"}
-        <ConceptCards data={placesData} on:froggie={(e)=>handleJournalClick(e)} />
+        <ConceptCards data={placesData} on:froggie/>
     {:else if activeTab==="Vehicles"}
-        <ConceptCards data={vehiclesData} on:froggie={(e)=>handleJournalClick(e)} />
+        <ConceptCards data={vehiclesData} on:froggie />
     {:else if activeTab==="Notes"}
-        <ConceptCards data={notesData} on:froggie={(e)=>handleJournalClick(e)} />
+        <ConceptCards data={notesData} on:froggie />
     {/if}
 </div>
 
