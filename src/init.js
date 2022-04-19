@@ -1,5 +1,5 @@
 import BasicApplication from "./view/BasicApplication.js";
-
+import registerSettings from "../src/shared/settings";
 // Hooks.once("ready", () => new BasicApplication().render(true, { focus: true }));
 
 Hooks.on("renderJournalDirectory", (app, html, data) => {
@@ -12,3 +12,7 @@ Hooks.on("renderJournalDirectory", (app, html, data) => {
    html.find(".directory-header .action-buttons").append(button);
 });
 
+Hooks.once("init", async () => {
+   registerSettings();
+
+});

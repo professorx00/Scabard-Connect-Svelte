@@ -54,6 +54,24 @@ import { onMount } from 'svelte';
     const tabChange=(e)=>{
         activeTab = e.detail;
     }
+
+
+    const getImages = async (concept, data)=>{
+        console.log(concept, data)
+        if(concept === "place"){
+            let bool = game.settings.get("scabard-connect", "placesMaps")
+            if(bool){
+                if(data.main.largeImageName === "Map"){
+                    return data.main.largeImageURL
+                }
+            }
+            return data.main.imageURL
+        }
+    
+        return data.main.imageURL;
+    }
+
+
     onMount(()=>{
         console.log("campaign Details",selectedCampaignDetails)
         adventuresData = selectedCampaignDetails.rows.filter((item)=>item.concept==="Adventure")
@@ -89,6 +107,10 @@ import { onMount } from 'svelte';
             console.log(folder)
 
             const folderid = "";
+
+            const imageURL = await getImages(concept,data);
+            console.log(imageURL)
+
             //Creates a new Journal Entry which I can render
             let entry = game.journal.find(e => {
                 if(e.data.flags.scabard){
@@ -100,7 +122,7 @@ import { onMount } from 'svelte';
                 id: id,
                 name: data.main.name,
                 content: data.main.description,
-                img: data.main.imageURL,
+                img: imageURL,
                 flags: {"scabard": { id: id, uri: uri}},
                 folder: folder.id
             }, {});
