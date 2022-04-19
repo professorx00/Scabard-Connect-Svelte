@@ -1,16 +1,22 @@
+<svelte:head>
+	<script src="module/scabard-connect/dist/luxon.js"></script>
+</svelte:head>
+
+
 <script>
    import { ApplicationShell }   from '@typhonjs-fvtt/runtime/svelte/component/core';
    import LoginForm from '../components/LoginForm.svelte';
    import CampaignDetails from '../components/CampaignDetails.svelte';
    import CamapignsForm from '../components/CamapignsForm.svelte';
    import UserStores from '../stores/UserStores'
-import { onMount } from 'svelte';
+   import { onMount } from 'svelte';
    export let elementRoot;
 
    export let username = '';
    export let accessKey = '';
    export let campaigns = null;
    export let step = 0;
+   let validator;
 
    export let selectedCampaign;
    export let selectedCampaignDetails;
@@ -26,8 +32,25 @@ import { onMount } from 'svelte';
     selectedCampaignDetails =value.selectedCampaignDetails
    })
 
-   onMount(()=>{
-      UserStores.set({step: 0, username: '', accessKey: '', campaigns: null, selectedCampaign: null, selectedCampaignDetails: null})
+   onMount(async ()=>{
+      accessKey = game.settings.get("scabard-connect", "accessKey")
+      username = game.settings.get("scabard-connect", "username")
+      validator = game.settings.get("scabard-connect", "validator")
+      if(accessKey === "" || username ===""){
+         step=0
+         UserStores.set({step: step, username: username, accessKey: accessKey, validator: validator, campaigns: null, selectedCampaign: null, selectedCampaignDetails: null})
+      }else{
+         try{
+            const res = await axios.get("https://www.scabard.com/api/v0/campaign", {headers: {"accessKey": accessKey, "username":username}})
+            if(res.data){
+               step = 1
+                UserStores.set({step: step, username: username, accessKey: accessKey, validator: validator, campaigns: [...res.data.rows], selectedCampaign: null, selectedCampaignDetails: null})
+            }
+         }catch(err){
+            step=0
+            UserStores.set({step: step, username: username, accessKey: accessKey, validator: validator, campaigns: null, selectedCampaign: null, selectedCampaignDetails: null})
+         }
+      }
    })
 
 

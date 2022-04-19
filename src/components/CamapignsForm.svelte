@@ -22,7 +22,6 @@ console.log(username)
 
 const handleCampaignChoice = async (e)=>{
     try{
-        //7783542973860947118
         const uri = `https://www.scabard.com/api/v0${selectedCampaign.uri}`
         const res= await axios.get(uri, {headers:{"accessKey": accessKey, "username": username}})
        UserStores.set({...dataStore,selectedCampaign:selectedCampaign, selectedCampaignDetails: res.data, step: 2})
