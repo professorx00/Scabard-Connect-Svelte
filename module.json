@@ -17,7 +17,7 @@
   "readme": "https://github.com/typhonjs-fvtt-demo/template-svelte-esm/blob/master/README.md",
   "bugs": "https://github.com/professorx00/Scabard-Connect-Svelte/issues",
   "changelog": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/latest/",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "9",
   "esmodules": ["./dist/scabard-connect.js"],

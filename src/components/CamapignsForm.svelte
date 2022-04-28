@@ -18,13 +18,15 @@ UserStores.subscribe((value)=>{
     selectedCampaignDetails =value.selectedCampaignDetails
 })
 
-console.log(username)
-
 const handleCampaignChoice = async (e)=>{
     try{
         const uri = `https://www.scabard.com/api/v0${selectedCampaign.uri}`
         const res= await axios.get(uri, {headers:{"accessKey": accessKey, "username": username}})
-       UserStores.set({...dataStore,selectedCampaign:selectedCampaign, selectedCampaignDetails: res.data, step: 2})
+        if(res.status !== 200){
+            UserStores.set({...dataStore,selectedCampaign:null, selectedCampaignDetails: null, step: 0})
+        }else{
+            UserStores.set({...dataStore,selectedCampaign:selectedCampaign, selectedCampaignDetails: res.data, step: 2})
+        }
     }catch(err){
         errors = err;
     }
