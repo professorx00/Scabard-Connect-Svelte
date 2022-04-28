@@ -1,13 +1,7 @@
 <script>
-    // import Adventures from './concepts/Adventures.svelte';
-    // import Characters from './concepts/Characters.svelte';
-    // import Events from './concepts/Events.svelte';
-    // import Groups from './concepts/Groups.svelte';
-    // import Items from './concepts/Items.svelte';
-    // import Places from './concepts/Places.svelte';
-    // import Vehicles from './concepts/Vehicles.svelte';
-    // import Notes from './concepts/Notes.svelte';
     import ConceptCards from './ConceptCards.svelte';
+    import createJournalEntry from '../scripts/journal'
+    import { TJSDialog } from '@typhonjs-fvtt/runtime/svelte/application';
 
     import UserStores from '../stores/UserStores'
     import Tabs from '../shared/Tabs.svelte';
@@ -55,23 +49,6 @@ import { onMount } from 'svelte';
         activeTab = e.detail;
     }
 
-
-    const getImages = async (concept, data)=>{
-        console.log(concept, data)
-        if(concept === "place"){
-            let bool = game.settings.get("scabard-connect", "placesMaps")
-            if(bool){
-                if(data.main.largeImageName === "Map"){
-                    return data.main.largeImageURL
-                }
-            }
-            return data.main.imageURL
-        }
-    
-        return data.main.imageURL;
-    }
-
-
     onMount(()=>{
         console.log("campaign Details",selectedCampaignDetails)
         adventuresData = selectedCampaignDetails.rows.filter((item)=>item.concept==="Adventure")
@@ -84,97 +61,71 @@ import { onMount } from 'svelte';
         notesData = selectedCampaignDetails.rows.filter((item)=>item.concept==="Note")
     })
 
-       document.addEventListener("froggie", (async e=>{
+
+       document.addEventListener("addScabardJournal", (async e=>{
             //Retrieves the Data
             const item = e.detail.item
             const response = await axios(`https://www.scabard.com/api/v0${item.uri}`,{ headers: { username: username, accessKey: accessKey }})
-            console.log(response.data)
             const data = response.data
             const uri = item.uri;
             const id =  item.uri.split('/')[4]
             const concept = item.uri.split("/")[3]
-            // Checks If there is a folder if there is returns else return new
-            let folder = await _findFolder(concept, id)
-            console.log(folder)
-            if(!folder){
-                console.log("creating Folder")
-                folder = await Folder.create({
-                    name: `Scabard ${concept}`,
-                    type: 'JournalEntry',
-                    flags: {"scabard": concept}
-                })
-            }
-            console.log(folder)
 
-            const folderid = "";
-
-            const imageURL = await getImages(concept,data);
-            console.log(imageURL)
-
-            //Creates a new Journal Entry which I can render
-            let entry = game.journal.find(e => {
-                if(e.data.flags.scabard){
-                    return e.data.flags.scabard.id === id
-                }
+            /**
+             * A
+             * @function createJournalEntry
+             * @param {String} concept
+             * @param {Object} data   Data that is coming from scabards API
+             * @param {String} id   Scabard Id for the document 
+             * @param {String} uri Scabard uri to get all the data
+             */
+            const entry = createJournalEntry(concept, data, id,uri)
+            if(entry){
+                TJSDialog.prompt({
+                    title: 'Success',
+                    draggable: false,
+                    modal: true,
+                    content: 'Your Journal Entry has been imported',  // You can set content with a Svelte component!
+                    label: 'Ok'
                 });
-            if(entry) return await _updateExistingEntry(entry, data,id,uri, folder.id )
-            entry = await JournalEntry.create({
-                id: id,
-                name: data.main.name,
-                content: data.main.description,
-                img: imageURL,
-                flags: {"scabard": { id: id, uri: uri}},
-                folder: folder.id
-            }, {});
-     
-            return entry;          
-       }))
+            }else{
+                TJSDialog.prompt({
+                    title: 'Failure',
+                    draggable: false,
+                    modal: true,
+                    content: 'Not able to import the Scabard Journal',  // You can set content with a Svelte component!
+                    label: 'Ok'
+                });
+            }
 
-    async function _findFolder(concept, id){
-        const folders = game.folders.filter(f => (f.data.type === "JournalEntry") && f.data.flags["scabard"]);
-        const filteredFolders = folders.filter((folder)=>folder.data.flags.scabard===concept);
-        return filteredFolders[0] ? filteredFolders[0] : null;
-    }
-    async function _updateExistingEntry(entry, data, id, uri, folder) {
-  /**
-   * A hook event that fires when the user is updating an existing JournalEntry from a WorldAnvil article.
-   * @function ScabardUpdateJournalEntry
-   * @memberof hookEvents
-   * @param {JournalEntry} entry            The JournalEntry document being updated
-   * @param {Object} data              Scabard Document Object
-   */
-  Hooks.callAll(`ScabardUpdateJournalEntry`, entry, id, uri);
+       }));
 
-  // Update the entry
-  await entry.update({
-    id:id,
-    name: data.main.name,
-    content: data.main.description,
-    img: data.main.imageURL,
-    "scabard": { id: id, uri: uri},
-    folder: folder
-  });
-}
+
+    document.addEventListener("addCharacter", async(e)=>{
+        console.log(e.detail.item)
+        createCharacterActor(concept, data,id, uri)
+    })
+
 </script>
 
     <div class="main">
     <Tabs {tabs} {activeTab} on:tabChange={tabChange}/>
     {#if activeTab==="Adventures"}
-        <ConceptCards data={adventuresData} on:froggie />
+        <ConceptCards data={adventuresData} on:addScabardJournal />
     {:else if activeTab==="Characters"}
-        <ConceptCards data={characterData} on:froggie />
+        <ConceptCards data={characterData} on:addScabardJournal />
     {:else if activeTab==="Events"}
-        <ConceptCards data={eventData} on:froggie />
+        <ConceptCards data={eventData} on:addScabardJournal />
     {:else if activeTab==="Groups"}
-        <ConceptCards data={groupData} on:froggie />
+        <ConceptCards data={groupData} on:addScabardJournal />
     {:else if activeTab==="Items"}
-        <ConceptCards data={itemsData} on:froggie />
+        <ConceptCards data={itemsData} on:addScabardJournal />
     {:else if activeTab==="Places"}
-        <ConceptCards data={placesData} on:froggie/>
+        <ConceptCards data={placesData} on:addScabardJournal/>
     {:else if activeTab==="Vehicles"}
-        <ConceptCards data={vehiclesData} on:froggie />
+        <ConceptCards data={vehiclesData} on:addScabardJournal />
     {:else if activeTab==="Notes"}
-        <ConceptCards data={notesData} on:froggie />
+        <ConceptCards data={notesData} on:addScabardJournal />
     {/if}
 </div>
 

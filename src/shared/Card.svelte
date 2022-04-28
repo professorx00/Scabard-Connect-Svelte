@@ -5,7 +5,7 @@
         let ref;
     
         const handleClick = (item)=>{
-            const event  = new CustomEvent('froggie', {
+            const event  = new CustomEvent('addScabardJournal', {
             detail: {
                 item: item
             }, 

@@ -25,7 +25,7 @@
         <NoResults />
     {:else if filterResults.length >0}
         {#each filterResults as item }
-            <Card bind:item on:froggie/>
+            <Card bind:item on:addScabardJournal/>
         {/each}
     {:else}
         {#each data as item }

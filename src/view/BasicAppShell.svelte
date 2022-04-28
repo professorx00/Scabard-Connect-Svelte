@@ -1,8 +1,3 @@
-<svelte:head>
-	<script src="module/scabard-connect/dist/luxon.js"></script>
-</svelte:head>
-
-
 <script>
    import { ApplicationShell }   from '@typhonjs-fvtt/runtime/svelte/component/core';
    import LoginForm from '../components/LoginForm.svelte';
@@ -32,6 +27,7 @@
     selectedCampaignDetails =value.selectedCampaignDetails
    })
 
+
    onMount(async ()=>{
       accessKey = game.settings.get("scabard-connect", "accessKey")
       username = game.settings.get("scabard-connect", "username")
@@ -45,6 +41,8 @@
             if(res.data){
                step = 1
                 UserStores.set({step: step, username: username, accessKey: accessKey, validator: validator, campaigns: [...res.data.rows], selectedCampaign: null, selectedCampaignDetails: null})
+            }else{
+               console.log(res)
             }
          }catch(err){
             step=0
