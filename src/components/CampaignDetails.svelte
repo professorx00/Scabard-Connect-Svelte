@@ -14,6 +14,7 @@ import { onMount } from 'svelte';
     export let selectedCampaign;
     export let selectedCampaignDetails;
     export let dataStore;
+    let loading = false;
     let tabs = [
         'Adventures',
         'Characters',
@@ -63,6 +64,8 @@ import { onMount } from 'svelte';
 
 
        document.addEventListener("addScabardJournal", (async e=>{
+        if(!loading){
+            loading=true
             //Retrieves the Data
             const item = e.detail.item
             const response = await axios(`https://www.scabard.com/api/v0${item.uri}`,{ headers: { username: username, accessKey: accessKey }})
@@ -79,7 +82,7 @@ import { onMount } from 'svelte';
              * @param {String} id   Scabard Id for the document 
              * @param {String} uri Scabard uri to get all the data
              */
-            const entry = createJournalEntry(concept, data, id,uri)
+            const entry = await createJournalEntry(concept, data, id,uri);
             if(entry){
                 TJSDialog.prompt({
                     title: 'Success',
@@ -88,6 +91,7 @@ import { onMount } from 'svelte';
                     content: 'Your Journal Entry has been imported',  // You can set content with a Svelte component!
                     label: 'Ok'
                 });
+                loading=false;
             }else{
                 TJSDialog.prompt({
                     title: 'Failure',
@@ -96,8 +100,9 @@ import { onMount } from 'svelte';
                     content: 'Not able to import the Scabard Journal',  // You can set content with a Svelte component!
                     label: 'Ok'
                 });
+                loading=false;
             }
-
+        }
        }));
 
 

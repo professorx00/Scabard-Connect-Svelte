@@ -2,16 +2,19 @@
     	import { scale, fade } from 'svelte/transition';
         import { expoInOut } from 'svelte/easing'; 
         export let item; 
+        let loading = false;
         let ref;
     
         const handleClick = (item)=>{
+            loading = true;
             const event  = new CustomEvent('addScabardJournal', {
-            detail: {
-                item: item
-            }, 
-            bubbles: true
-        });
-        ref.dispatchEvent(event);
+                    detail: {
+                        item: item
+                    }, 
+                    bubbles: true
+                });
+            ref.dispatchEvent(event);
+            loading = false;
         }
 
 
@@ -26,7 +29,7 @@
                     {item.name}
                 </div>
                 <div class="buttons">
-                    <div bind:this={ref} on:click={()=>handleClick(item)} class="button tooltip"><img src="modules/scabard-connect/public/images/journal.png" class="buttonImg" alt="Journal"><span class="tooltiptext">Import a Journal</span></div>
+                    <div bind:this={ref} on:click={()=>{if(!loading){handleClick(item)}}} class="button tooltip"><img src="modules/scabard-connect/public/images/journal.png" class="buttonImg" alt="Journal"><span class="tooltiptext">Import a Journal</span></div>
                     <div on:click={()=>{handleScabardClick(item)}} class="button tooltip"><img src="modules/scabard-connect/public/images/favicon.ico" class="buttonImg" alt="Scabard"><span class="tooltiptext">Open on Scabard</span></div>
                 </div>
             </div>

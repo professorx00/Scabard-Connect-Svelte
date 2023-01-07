@@ -14,24 +14,72 @@ const getImages = async (concept, data) => {
 };
 
 async function _findFolder(concept, id) {
-   const folders = game.folders.filter((f) => f.data.type === "JournalEntry" && f.data.flags["scabard"]);
-   const filteredFolders = folders.filter((folder) => folder.data.flags.scabard === concept);
+   const folders = game.folders.filter((f) => f.type === "JournalEntry" && f.flags["scabard"]);
+   const filteredFolders = folders.filter((folder) => folder.flags.scabard === concept);
    return filteredFolders[0] ? filteredFolders[0] : null;
 }
 
-async function _updateExistingEntry(entry, data, id, uri, folder) {
-   Hooks.callAll(`ScabardUpdateJournalEntry`, entry, id, uri);
-
+async function _updateExistingEntry(entry, data, id, uri, pages, folder) {
    // Update the entry
-   await entry.data.update({
-      id: id,
-      name: data.main.name,
-      content: data.main.description,
-      img: data.main.imageURL,
-      scabard: { id: id, uri: uri },
-      folder: folder,
-   });
+   try {
+      let updated = await entry.updateDocuments(pages);
+      return updated;
+   } catch (err) {
+      console.error("error", err);
+   }
 }
+
+const createPages = async (data, id, uri, imageURL) => {
+   const pageContent = [data.main.description, data.main.secrets, data.main.gmSecrets];
+   let pages = [];
+   for (let i = 0; i < pageContent.length; i++) {
+      // Text, Image,PDF,Video
+      switch (i) {
+         case 0:
+            let newPage = {
+               id: `${id}+page${i}`,
+               type: "text",
+               name: "Description",
+               text: { content: pageContent[i] },
+               flags: { scabard: { id: id, uri: uri } },
+            };
+            pages.push(newPage);
+            break;
+         case 1:
+            let newPage2 = {
+               id: `${id}+page${i}`,
+               name: "Secrets",
+               type: "text",
+               text: { content: pageContent[i] },
+               flags: { scabard: { id: id, uri: uri } },
+            };
+            pages.push(newPage2);
+            break;
+         case 2:
+            let newPage3 = {
+               id: `${id}+page${i}`,
+               name: "GM Secrets",
+               type: "text",
+               text: { content: pageContent[i] },
+               flags: { scabard: { id: id, uri: uri } },
+            };
+            pages.push(newPage3);
+            break;
+         default:
+            break;
+      }
+   }
+   let imagePage = {
+      id: id,
+      name: "Image",
+      type: "image",
+      src: imageURL,
+      flags: { scabard: { id: id, uri: uri } },
+   };
+   pages.push(imagePage);
+
+   return pages;
+};
 
 const createJournalEntry = async (concept, data, id, uri) => {
    // Checks If there is a folder if there is returns else return new
@@ -45,28 +93,178 @@ const createJournalEntry = async (concept, data, id, uri) => {
       });
    }
    const imageURL = await getImages(concept, data);
-   console.log(imageURL);
+   const pages = await createPages(data, id, uri, imageURL);
+   console.log("pages: ", pages);
 
    //Creates a new Journal Entry which I can render
    let entry = game.journal.find((e) => {
-      if (e.data.flags.scabard) {
-         return e.data.flags.scabard.id === id;
+      if (e.flags.scabard) {
+         return e.flags.scabard.id === id;
       }
    });
-   if (entry) return await _updateExistingEntry(entry, data, id, uri, folder.id);
-   entry = await JournalEntry.create(
+   if (entry) {
+      console.log("before delete", entry);
+      return await _updateExistingEntry(entry, data, id, uri, pages, folder.id);
+   }
+   let entries = await JournalEntry.createDocuments([
       {
          id: id,
          name: data.main.name,
-         content: data.main.description,
-         img: imageURL,
+         pages: pages,
          flags: { scabard: { id: id, uri: uri } },
          folder: folder.id,
       },
-      {}
-   );
+   ]);
+   entry = entries[0];
 
    return entry;
 };
 
 export default createJournalEntry;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

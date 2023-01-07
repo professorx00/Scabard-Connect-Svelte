@@ -1,5 +1,5 @@
 {
-  "name": "scabard-connect",
+  "id": "scabard-connect",
   "title": "Scabard Connect",
   "description": "Provides a way to import Scabard Documents into Foundry",
   "author": "programmingdad",
@@ -18,8 +18,10 @@
   "bugs": "https://github.com/professorx00/Scabard-Connect-Svelte/issues",
   "changelog": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/latest/",
   "version": "0.0.9",
-  "minimumCoreVersion": "0.8.6",
-  "compatibleCoreVersion": "9",
+  "compatibility": {
+    "minimum": 10,
+    "verified": "10.291"
+  },
   "esmodules": ["./dist/scabard-connect.js"],
   "styles": ["./dist/scabard-connect.css"],
   "languages": [
@@ -29,11 +31,13 @@
       "path": "lang/en.json"
     }
   ],
-  "system": [],
-  "dependencies": [],
+  "relationships": {
+    "systems": [],
+    "requires": []
+  },
   "socket": false,
-  "manifest": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/0.0.7-beta/module.json",
-  "download": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/0.0.7-beta/scabard-connect.zip",
+  "manifest": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.0/module.json",
+  "download": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.0/scabard-connect.zip",
   "protected": false,
   "coreTranslation": false,
   "library": false
