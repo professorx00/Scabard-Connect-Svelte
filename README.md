@@ -1,4 +1,4 @@
-## Ambient Doors
+## Scabard-Connect 
 
 * **Author**: professorx00#3929
 * **Version**: 1.0.0
@@ -9,6 +9,11 @@
 * [https://github.com/professorx00/Scabard-Connect-Svelte](https://github.com/professorx00/Scabard-Connect-Svelte)
 
 ### Description
+The Scabard-Connect Foundry Module makes it easy to connect your Foundry Virtual Tabletop to your RPG campaign on [http://scabard.com/pbs](http://www.scabard.com)
+
+Scabard is an easy to use RPG Campaign Manager. With innovative features like connections, auto-linking, the Proper Noun Detector, and Ask Alejandro, an AI-Assist Bard.
+
+<p>With this module, you can keep your players engaged and up-to-date with your campaigns in one central location.
 
 
 ## Installation
@@ -17,10 +22,7 @@
 * Paste the following link: https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.0.0/module.json
 * Click "Install"
 * Activate the module in your World using **Manage Modules** under the **Game Settings** tab.
-### Method 2
-* Use the foundry module search to look for Scabard Connect
-* Click Install
-* Activate the module in your World using **Manage Modules** under the **Game Settings** tab.
+
 
 ## Usage
 ###
