@@ -27,7 +27,7 @@
 * Go to the Journals Tab and Click on the Scabard Logo
 * It will ask for your Access Key which can be found in your user profile in scabard under the triangle next your name<br/>
 <img src="https://raw.githubusercontent.com/professorx00/Scabard-Connect-Svelte/main/public/APIAccessToken.png" /><br/>
-<strong> API key is only good for 24 hours. You will have to redo it ever 24 Hours </strong>
+<strong> <span style="color: red;"> API key is only good for 24 hours. You will have to redo it ever 24 Hours </span></strong>
 
 * Enter API Access Key and you Username for Scabard
 * Select which campaign you want to open
