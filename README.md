@@ -32,7 +32,13 @@
 * Enter API Access Key and you Username for Scabard
 * Select which campaign you want to open
 * Choose which Scabard type that you want. You can search using the Search Bar on that tab. 
-* To import the entry click the 
+* To import the entry click the <img src="https://github.com/professorx00/Scabard-Connect-Svelte/blob/main/public/importButtonPreview.png?raw=true" /> the system will already look to see if it exist in the Scabard folder then update if need be or add it if need be. 
+* You also have the ability to open a new window directly to Scabard so that you can edit the the entry. Using the <img src="https://github.com/professorx00/Scabard-Connect-Svelte/blob/main/public/OpenScabardButton.png?raw=true" /> Scabard Button. 
+
+### Known Bugs
+
+* It currently places Main section, Secrets, GM Secrets, and Image into pages named: Description, Secrets, GM Secrets, Image. You can change these but it will not update. It is on the TODO to make sure it updates even not looking at the title.
+
 
 ## Change Log
 
