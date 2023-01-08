@@ -19,11 +19,56 @@ async function _findFolder(concept, id) {
    return filteredFolders[0] ? filteredFolders[0] : null;
 }
 
-async function _updateExistingEntry(entry, data, id, uri, pages, folder) {
+async function _updateExistingEntry(entry, pages) {
    // Update the entry
    try {
-      let updated = await entry.updateDocuments(pages);
-      return updated;
+      const Jpages = entry.pages;
+      let newPages = [];
+      Jpages.forEach((h) => {
+         if (h.flags.scabard) {
+            let id = h._id;
+            let name = h.name;
+            switch (name) {
+               case "Description":
+                  newPages.push({
+                     _id: id,
+                     ...pages[0],
+                  });
+                  break;
+               case "Secrets":
+                  newPages.push({
+                     _id: id,
+                     ...pages[1],
+                  });
+                  break;
+               case "GM Secrets":
+                  newPages.push({
+                     _id: id,
+                     ...pages[2],
+                  });
+                  break;
+               case "Image":
+                  newPages.push({
+                     _id: id,
+                     ...pages[3],
+                  });
+                  break;
+               default:
+                  newPages.push({
+                     _id: id,
+                     name: h.name,
+                     type: h.type,
+                     image: h.image,
+                     text: h.text,
+                     flags: h.flags,
+                  });
+                  break;
+            }
+         }
+      });
+      const newEntry = await entry.updateEmbeddedDocuments("JournalEntryPage", newPages);
+
+      return newEntry;
    } catch (err) {
       console.error("error", err);
    }
@@ -34,40 +79,14 @@ const createPages = async (data, id, uri, imageURL) => {
    let pages = [];
    for (let i = 0; i < pageContent.length; i++) {
       // Text, Image,PDF,Video
-      switch (i) {
-         case 0:
-            let newPage = {
-               id: `${id}+page${i}`,
-               type: "text",
-               name: "Description",
-               text: { content: pageContent[i] },
-               flags: { scabard: { id: id, uri: uri } },
-            };
-            pages.push(newPage);
-            break;
-         case 1:
-            let newPage2 = {
-               id: `${id}+page${i}`,
-               name: "Secrets",
-               type: "text",
-               text: { content: pageContent[i] },
-               flags: { scabard: { id: id, uri: uri } },
-            };
-            pages.push(newPage2);
-            break;
-         case 2:
-            let newPage3 = {
-               id: `${id}+page${i}`,
-               name: "GM Secrets",
-               type: "text",
-               text: { content: pageContent[i] },
-               flags: { scabard: { id: id, uri: uri } },
-            };
-            pages.push(newPage3);
-            break;
-         default:
-            break;
-      }
+      let newPage = {
+         id: id,
+         name: ["Description", "Secrets", "GM Secrets"][i],
+         type: "text",
+         text: { content: pageContent[i] },
+         flags: { scabard: { id: id, uri: uri } },
+      };
+      pages.push(newPage);
    }
    let imagePage = {
       id: id,
@@ -76,6 +95,7 @@ const createPages = async (data, id, uri, imageURL) => {
       src: imageURL,
       flags: { scabard: { id: id, uri: uri } },
    };
+
    pages.push(imagePage);
 
    return pages;
@@ -94,7 +114,6 @@ const createJournalEntry = async (concept, data, id, uri) => {
    }
    const imageURL = await getImages(concept, data);
    const pages = await createPages(data, id, uri, imageURL);
-   console.log("pages: ", pages);
 
    //Creates a new Journal Entry which I can render
    let entry = game.journal.find((e) => {
@@ -103,24 +122,73 @@ const createJournalEntry = async (concept, data, id, uri) => {
       }
    });
    if (entry) {
-      console.log("before delete", entry);
-      return await _updateExistingEntry(entry, data, id, uri, pages, folder.id);
+      console.log("before update", entry);
+      return await _updateExistingEntry(entry, pages);
    }
    let entries = await JournalEntry.createDocuments([
       {
-         id: id,
+         id: data.main.id,
          name: data.main.name,
          pages: pages,
          flags: { scabard: { id: id, uri: uri } },
          folder: folder.id,
       },
    ]);
-   entry = entries[0];
 
-   return entry;
+   return entries[0];
 };
 
 export default createJournalEntry;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
