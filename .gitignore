@@ -5,3 +5,4 @@ template-svelte-esm.lock
 !.vscode/extensions.json
 dist/
 node_modules/
+scabardconnect/
