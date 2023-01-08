@@ -29,9 +29,9 @@
 
 
    onMount(async ()=>{
-      accessKey = game.settings.get("scabard-connect", "accessKey")
-      username = game.settings.get("scabard-connect", "username")
-      validator = game.settings.get("scabard-connect", "validator")
+      accessKey = game.settings.get("scabardconnect", "accessKey")
+      username = game.settings.get("scabardconnect", "username")
+      validator = game.settings.get("scabardconnect", "validator")
       if(accessKey === "" || username ===""){
          step=0
          UserStores.set({step: step, username: username, accessKey: accessKey, validator: validator, campaigns: null, selectedCampaign: null, selectedCampaignDetails: null})

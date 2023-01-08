@@ -19,7 +19,7 @@ const s_TYPHONJS_MODULE_LIB = false;
 
 // Creates a standard configuration for PostCSS with autoprefixer & postcss-preset-env.
 const postcssMain = postcssConfig({
-   extract: "scabard-connect.css",
+   extract: "scabardconnect.css",
    compress: s_COMPRESS,
    sourceMap: s_SOURCEMAPS,
 });
@@ -42,7 +42,7 @@ export default () => {
          // The main module bundle
          input: `src/init.js`,
          output: {
-            file: `dist/scabard-connect.js`,
+            file: `dist/scabardconnect.js`,
             format: "es",
             plugins: outputPlugins,
             sourcemap,
@@ -79,4 +79,5 @@ export default () => {
       },
    ];
 };
+
 

@@ -33,8 +33,8 @@ const submitHandler = async ()=>{
     try{
         const uri = 'https://www.scabard.com/api/v0/campaign'
         const res = await axios.get(uri, {headers: {"accessKey":accessKey, "username": username}})
-        await game.settings.set("scabard-connect", "accessKey", accessKey);
-        await game.settings.set("scabard-connect", "username", username);
+        await game.settings.set("scabardconnect", "accessKey", accessKey);
+        await game.settings.set("scabardconnect", "username", username);
         if(res.status !== 200){
             UserStores.set({ username: username, accessKey: accessKey, campaigns: [], step: 0})
             errors = "Please verify that the Username and Access Key are correct. Access Keys are only good for 24 Hrs.";

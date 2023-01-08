@@ -1,5 +1,5 @@
 {
-  "name": "scabard-connect",
+  "name": "scabardconnect",
   "description": "Provides a way to import Scabard content into Foundry VTT",
   "license": "MIT",
   "private": true,
@@ -35,3 +35,4 @@
     "eslint": "eslint ."
   }
 }
+

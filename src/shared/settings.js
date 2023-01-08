@@ -1,6 +1,6 @@
 const registerSettings = function () {
    // Register any custom module settings here
-   const modulename = "scabard-connect";
+   const modulename = "scabardconnect";
 
    // game.settings.register(modulename, "allow-player", {
    //    name: "Allow",
@@ -72,3 +72,4 @@ const registerSettings = function () {
 };
 
 export default registerSettings;
+

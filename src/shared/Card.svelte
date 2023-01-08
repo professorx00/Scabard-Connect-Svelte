@@ -29,8 +29,8 @@
                     {item.name}
                 </div>
                 <div class="buttons">
-                    <div bind:this={ref} on:click={()=>{if(!loading){handleClick(item)}}} class="button tooltip"><img src="modules/scabard-connect/public/images/journal.png" class="buttonImg" alt="Journal"><span class="tooltiptext">Import a Journal</span></div>
-                    <div on:click={()=>{handleScabardClick(item)}} class="button tooltip"><img src="modules/scabard-connect/public/images/favicon.ico" class="buttonImg" alt="Scabard"><span class="tooltiptext">Open on Scabard</span></div>
+                    <div bind:this={ref} on:click={()=>{if(!loading){handleClick(item)}}} class="button tooltip"><img src="modules/scabardconnect/public/images/journal.png" class="buttonImg" alt="Journal"><span class="tooltiptext">Import a Journal</span></div>
+                    <div on:click={()=>{handleScabardClick(item)}} class="button tooltip"><img src="modules/scabardconnect/public/images/favicon.ico" class="buttonImg" alt="Scabard"><span class="tooltiptext">Open on Scabard</span></div>
                 </div>
             </div>
 </section>

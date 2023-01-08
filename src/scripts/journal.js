@@ -1,7 +1,7 @@
 const getImages = async (concept, data) => {
    console.log(concept, data);
    if (concept === "place") {
-      let bool = game.settings.get("scabard-connect", "placesMaps");
+      let bool = game.settings.get("scabardconnect", "placesMaps");
       if (bool) {
          if (data.main.largeImageName === "Map") {
             return data.main.largeImageURL;
@@ -139,6 +139,7 @@ const createJournalEntry = async (concept, data, id, uri) => {
 };
 
 export default createJournalEntry;
+
 
 
 
