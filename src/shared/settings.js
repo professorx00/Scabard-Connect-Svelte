@@ -20,15 +20,6 @@ const registerSettings = function () {
    //    type: Boolean,
    // });
 
-   game.settings.register(modulename, "placesMaps", {
-      name: "Places as Maps",
-      hint: "Allows to import Maps instead of Images in the journal entry for places",
-      scope: "world",
-      config: true,
-      default: true,
-      type: Boolean,
-   });
-
    game.settings.register(modulename, "accessKey", {
       name: "Access Key",
       hint: "24hr Scabard access key to your campaign found on the profile page under the triangle",

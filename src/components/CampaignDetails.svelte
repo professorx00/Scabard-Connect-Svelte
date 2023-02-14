@@ -104,13 +104,6 @@ import { onMount } from 'svelte';
             }
         }
        }));
-
-
-    document.addEventListener("addCharacter", async(e)=>{
-        console.log(e.detail.item)
-        createCharacterActor(concept, data,id, uri)
-    })
-
 </script>
 
     <div class="main">

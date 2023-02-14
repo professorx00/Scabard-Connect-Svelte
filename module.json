@@ -5,10 +5,6 @@
   "author": "David Ward",
   "authors": [
     {
-      "name": "Michael Leahy (TyphonJS) - MLeahy#4299",
-      "url": "https://www.typhonjs.io"
-    },
-    {
       "name": "David Ward",
       "url": "https://github.com/professorx00/"
     }
@@ -17,7 +13,7 @@
   "readme": "https://github.com/typhonjs-fvtt-demo/template-svelte-esm/blob/master/README.md",
   "bugs": "https://github.com/professorx00/Scabard-Connect-Svelte/issues",
   "changelog": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/latest/",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "compatibility": {
     "minimum": 10,
     "verified": "10.291"
@@ -36,8 +32,8 @@
     "requires": []
   },
   "socket": false,
-  "manifest": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.0.0/module.json",
-  "download": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.0.0/scabardconnect.zip",
+  "manifest": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.1.0/module.json",
+  "download": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.1.0/scabardconnect.zip",
   "protected": false,
   "coreTranslation": false,
   "library": false
