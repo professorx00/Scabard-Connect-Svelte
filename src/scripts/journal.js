@@ -1,16 +1,16 @@
-const getImages = async (concept, data) => {
-   console.log(concept, data);
-   if (concept === "place") {
-      let bool = game.settings.get("scabardconnect", "placesMaps");
-      if (bool) {
-         if (data.main.largeImageName === "Map") {
-            return data.main.largeImageURL;
-         }
-      }
-      return data.main.imageURL;
-   }
-
+const getImages = async (data) => {
    return data.main.imageURL;
+};
+
+const getMap = async (concept, data) => {
+   if (concept === "place") {
+      if (data.main.largeImageURL) {
+         return data.main.largeImageURL;
+      } else {
+         return null;
+      }
+   }
+   return null;
 };
 
 async function _findFolder(concept, id) {
@@ -74,7 +74,7 @@ async function _updateExistingEntry(entry, pages) {
    }
 }
 
-const createPages = async (data, id, uri, imageURL) => {
+const createPages = async (data, id, uri, imageURL, mapURL) => {
    const pageContent = [data.main.description, data.main.secrets, data.main.gmSecrets];
    let pages = [];
    for (let i = 0; i < pageContent.length; i++) {
@@ -97,6 +97,16 @@ const createPages = async (data, id, uri, imageURL) => {
    };
 
    pages.push(imagePage);
+   if (mapURL) {
+      let mapPage = {
+         id: id,
+         name: "Map",
+         type: "image",
+         src: mapURL,
+         flags: { scabard: { id: id, uri: uri } },
+      };
+      pages.push(mapPage);
+   }
 
    return pages;
 };
@@ -112,8 +122,9 @@ const createJournalEntry = async (concept, data, id, uri) => {
          flags: { scabard: concept },
       });
    }
-   const imageURL = await getImages(concept, data);
-   const pages = await createPages(data, id, uri, imageURL);
+   const imageURL = await getImages(data);
+   const mapURL = await getMap(concept, data);
+   const pages = await createPages(data, id, uri, imageURL, mapURL);
 
    //Creates a new Journal Entry which I can render
    let entry = game.journal.find((e) => {
@@ -139,201 +150,4 @@ const createJournalEntry = async (concept, data, id, uri) => {
 };
 
 export default createJournalEntry;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
