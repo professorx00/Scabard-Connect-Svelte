@@ -15,6 +15,7 @@
                 });
             ref.dispatchEvent(event);
             loading = false;
+            event.stopPropagation();
         }
 
 

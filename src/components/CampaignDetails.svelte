@@ -51,7 +51,6 @@ import { onMount } from 'svelte';
     }
 
     onMount(()=>{
-        console.log("campaign Details",selectedCampaignDetails)
         adventuresData = selectedCampaignDetails.rows.filter((item)=>item.concept==="Adventure")
         characterData = selectedCampaignDetails.rows.filter((item)=>item.concept==="Character")
         eventData = selectedCampaignDetails.rows.filter((item)=>item.concept==="Event")
@@ -64,6 +63,7 @@ import { onMount } from 'svelte';
 
 
        document.addEventListener("addScabardJournal", (async e=>{
+        e.stopImmediatePropagation()
         if(!loading){
             loading=true
             //Retrieves the Data
