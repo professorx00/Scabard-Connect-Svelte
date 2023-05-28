@@ -16,7 +16,7 @@
   "version": "1.1.0",
   "compatibility": {
     "minimum": 10,
-    "verified": "10.291"
+    "verified": "11.299"
   },
   "esmodules": ["./dist/scabardconnect.js"],
   "styles": ["./dist/scabardconnect.css"],
@@ -37,5 +37,6 @@
   "protected": false,
   "coreTranslation": false,
   "library": false
+
 
 }

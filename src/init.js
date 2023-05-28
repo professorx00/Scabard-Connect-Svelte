@@ -17,5 +17,4 @@ Hooks.on("renderJournalDirectory", (app, html, data) => {
 Hooks.once("init", async () => {
    registerSettings();
 
-
 });

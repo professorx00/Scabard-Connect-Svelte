@@ -19,7 +19,7 @@ async function _findFolder(concept, id) {
    return filteredFolders[0] ? filteredFolders[0] : null;
 }
 
-async function _updateExistingEntry(entry, pages) {
+async function _updateExistingEntry(entry, pages, isSecret) {
    // Update the entry
    try {
       const Jpages = entry.pages;
@@ -32,24 +32,28 @@ async function _updateExistingEntry(entry, pages) {
                case "Description":
                   newPages.push({
                      _id: id,
+                     ownership: { default: isSecret ? 0 : -1 },
                      ...pages[0],
                   });
                   break;
                case "Secrets":
                   newPages.push({
                      _id: id,
+                     ownership: { default: 0 },
                      ...pages[1],
                   });
                   break;
                case "GM Secrets":
                   newPages.push({
                      _id: id,
+                     ownership: { default: 0 },
                      ...pages[2],
                   });
                   break;
                case "Image":
                   newPages.push({
                      _id: id,
+                     ownership: { default: isSecret ? 0 : -1 },
                      ...pages[3],
                   });
                   break;
@@ -61,6 +65,7 @@ async function _updateExistingEntry(entry, pages) {
                      image: h.image,
                      text: h.text,
                      flags: h.flags,
+                     ownership: { default: isSecret ? 0 : -1 },
                   });
                   break;
             }
@@ -74,7 +79,7 @@ async function _updateExistingEntry(entry, pages) {
    }
 }
 
-const createPages = async (data, id, uri, imageURL, mapURL) => {
+const createPages = async (data, id, uri, imageURL, mapURL, isSecret) => {
    const pageContent = [data.main.description, data.main.secrets, data.main.gmSecrets];
    let pages = [];
    for (let i = 0; i < pageContent.length; i++) {
@@ -85,6 +90,7 @@ const createPages = async (data, id, uri, imageURL, mapURL) => {
          type: "text",
          text: { content: pageContent[i] },
          flags: { scabard: { id: id, uri: uri } },
+         ownership: i === 0 ? { default: isSecret ? 0 : -1 } : { default: 0 },
       };
       pages.push(newPage);
    }
@@ -94,6 +100,7 @@ const createPages = async (data, id, uri, imageURL, mapURL) => {
       type: "image",
       src: imageURL,
       flags: { scabard: { id: id, uri: uri } },
+      ownership: { default: isSecret ? 0 : -1 },
    };
 
    pages.push(imagePage);
@@ -104,6 +111,7 @@ const createPages = async (data, id, uri, imageURL, mapURL) => {
          type: "image",
          src: mapURL,
          flags: { scabard: { id: id, uri: uri } },
+         ownership: { default: isSecret ? 0 : -1 },
       };
       pages.push(mapPage);
    }
@@ -113,6 +121,8 @@ const createPages = async (data, id, uri, imageURL, mapURL) => {
 
 const createJournalEntry = async (concept, data, id, uri) => {
    // Checks If there is a folder if there is returns else return new
+   const isSecret = data.main.isSecret;
+   console.log("isSecret", isSecret);
    let folder = await _findFolder(concept, id);
    if (!folder) {
       console.log("creating Folder");
@@ -124,7 +134,7 @@ const createJournalEntry = async (concept, data, id, uri) => {
    }
    const imageURL = await getImages(data);
    const mapURL = await getMap(concept, data);
-   const pages = await createPages(data, id, uri, imageURL, mapURL);
+   const pages = await createPages(data, id, uri, imageURL, mapURL, isSecret);
 
    //Creates a new Journal Entry which I can render
    let entry = game.journal.find((e) => {
@@ -143,6 +153,7 @@ const createJournalEntry = async (concept, data, id, uri) => {
          pages: pages,
          flags: { scabard: { id: id, uri: uri } },
          folder: folder.id,
+         ownership: { default: isSecret ? 0 : 2 },
       },
    ]);
 
@@ -150,4 +161,24 @@ const createJournalEntry = async (concept, data, id, uri) => {
 };
 
 export default createJournalEntry;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
