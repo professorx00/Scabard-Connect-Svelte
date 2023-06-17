@@ -19,19 +19,23 @@ async function _findFolder(concept, id) {
    return filteredFolders[0] ? filteredFolders[0] : null;
 }
 
-async function _updateExistingEntry(entry, pages, isSecret) {
+async function _updateExistingEntry(entry, pages, data, isSecret) {
    // Update the entry
    try {
       const Jpages = entry.pages;
+      console.log("isSecret", isSecret);
+      console.log("data", data);
       let newPages = [];
       Jpages.forEach((h) => {
          if (h.flags.scabard) {
             let id = h._id;
             let name = h.name;
+            console.log("Names", h.name);
             switch (name) {
                case "Description":
                   newPages.push({
                      _id: id,
+                     name: h.name,
                      ownership: { default: isSecret ? 0 : -1 },
                      ...pages[0],
                   });
@@ -71,9 +75,9 @@ async function _updateExistingEntry(entry, pages, isSecret) {
             }
          }
       });
-      const newEntry = await entry.updateEmbeddedDocuments("JournalEntryPage", newPages);
-
-      return newEntry;
+      await entry.updateEmbeddedDocuments("JournalEntryPage", newPages);
+      await entry.update({ name: data.main.name });
+      return entry;
    } catch (err) {
       console.error("error", err);
    }
@@ -144,7 +148,7 @@ const createJournalEntry = async (concept, data, id, uri) => {
    });
    if (entry) {
       console.log("before update", entry);
-      return await _updateExistingEntry(entry, pages);
+      return await _updateExistingEntry(entry, pages, data, isSecret);
    }
    let entries = await JournalEntry.createDocuments([
       {
@@ -161,6 +165,22 @@ const createJournalEntry = async (concept, data, id, uri) => {
 };
 
 export default createJournalEntry;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
