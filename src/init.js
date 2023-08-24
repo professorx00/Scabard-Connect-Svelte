@@ -11,10 +11,11 @@ Hooks.on("renderJournalDirectory", (app, html, data) => {
       event.stopImmediatePropagation();
       new BasicApplication().render(true, { focus: true });
    });
-   html.find(".directory-header .action-buttons").append(button);
+   if(game.user.role === 4 || game.user.role === 3){
+      html.find(".directory-header .action-buttons").append(button);
+   }
 });
 
 Hooks.once("init", async () => {
    registerSettings();
-
 });
