@@ -25,42 +25,48 @@ async function _updateExistingEntry(entry, pages, data, isSecret) {
    // Update the entry
    try {
       const Jpages = entry.pages;
-      console.log("isSecret", isSecret);
-      console.log("data", data);
       let newPages = [];
-      Jpages.forEach((h) => {
+      Jpages.forEach((h,i) => {
          if (h.flags.scabard) {
             let id = h._id;
             let name = h.name;
             console.log("Names", h.name);
             switch (name) {
+               case "Brief Summary":
+                  newPages.push({
+                     _id: id,
+                     name: h.name,
+                     ownership: { default: isSecret ? 0 : -1 },
+                     ...pages[i],
+                  });
+                  break;
                case "Description":
                   newPages.push({
                      _id: id,
                      name: h.name,
                      ownership: { default: isSecret ? 0 : -1 },
-                     ...pages[0],
+                     ...pages[i],
                   });
                   break;
                case "Secrets":
                   newPages.push({
                      _id: id,
                      ownership: { default: 0 },
-                     ...pages[1],
+                     ...pages[i],
                   });
                   break;
                case "GM Secrets":
                   newPages.push({
                      _id: id,
                      ownership: { default: 0 },
-                     ...pages[2],
+                     ...pages[i],
                   });
                   break;
                case "Image":
                   newPages.push({
                      _id: id,
                      ownership: { default: isSecret ? 0 : -1 },
-                     ...pages[3],
+                     ...pages[i],
                   });
                   break;
                default:
@@ -72,6 +78,7 @@ async function _updateExistingEntry(entry, pages, data, isSecret) {
                      text: h.text,
                      flags: h.flags,
                      ownership: { default: isSecret ? 0 : -1 },
+                     ...pages[i],
                   });
                   break;
             }
@@ -86,13 +93,13 @@ async function _updateExistingEntry(entry, pages, data, isSecret) {
 }
 
 const createPages = async (data, id, uri, imageURL,isSecret, concept,mapURL) => {
-   const pageContent = [data.main.description, data.main.secrets, data.main.gmSecrets];
+   const pageContent = [data.main.briefSummary,data.main.description, data.main.secrets, data.main.gmSecrets];
    let pages = [];
    for (let i = 0; i < pageContent.length; i++) {
       // Text, Image,PDF,Video
       let newPage = {
          id: id,
-         name: ["Description", "Secrets", "GM Secrets"][i],
+         name: ["Brief Summary","Description", "Secrets", "GM Secrets" ][i],
          type: "text",
          text: { content: pageContent[i] },
          flags: { scabard: { id: id, uri: uri, concept: concept } },

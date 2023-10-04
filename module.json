@@ -1,6 +1,6 @@
 {
-  "id": "scabardconnectVite",
-  "title": "Scabard Connect Vite",
+  "id": "scabardconnect",
+  "title": "Scabard Connect",
   "description": "Provides a bare-bones Foundry module template repo to get set up with using the TyphonJS Runtime Library and Svelte with ES Modules.",
   "version": "1.6.0",
   "authors": [

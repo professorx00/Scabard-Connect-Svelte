@@ -1,10 +1,13 @@
 <script>
     import { ApplicationShell }   from '@typhonjs-fvtt/runtime/svelte/component/core';
+    import { getContext }         from 'svelte';
     import UserStores from '../stores/UserStores'
     import JournalStore from "../stores/JournalStore"
     import { onMount } from 'svelte';
     import axios from 'axios';
+
     export let elementRoot;
+   
 
     export let username = '';
     export let accessKey = '';
@@ -20,7 +23,9 @@
     export let data;
     export let concept;
 
-    console.log(id,uri,concept,data)
+    export let uploaded = false;
+
+    const application = getContext('#external').application;
  
     UserStores.subscribe((value)=>{
      dataStore = value
@@ -55,9 +60,15 @@
     })
 
     const removeHTML = (text)=>{
-      var temp = document.createElement('div');
-      temp.innerHTML = text;
-      return temp.textContent;
+      const modifiedText = addBreaks(text)
+      const doc = new DOMParser().parseFromString(modifiedText, 'text/html');
+      return doc.body.textContent || '';
+    }
+
+    const addBreaks = (text)=>{
+      let result = text
+      result = result.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, '\n')
+      return result
     }
 
     const formatBody = (data, concept)=>{
@@ -65,20 +76,43 @@
       let pages = data.data.pages
       console.log(pages)
       for(let page in pages){
-         console.log("name", pages[page])
+         if(pages[page].name =="Brief Summary"){
+            let bsum = pages[page].text.content
+            if(bsum){
+               fBody['briefSummary'] = bsum
+            }else{
+               fBody['briefSummary'] = " "
+            }
+            
+         }
          if( pages[page].name == 'Description'){
-            fBody['description'] =  removeHTML(pages[page].text.content)
+            let des =  pages[page].text.content
+            if(des){
+               fBody['description'] = des
+            }else{
+               fBody['description'] = " "
+            }
          }
          if( pages[page].name == "GM Secrets"){
-            fBody['gmSecrets'] =  removeHTML(pages[page].text.content)
+            let gms =  pages[page].text.content
+            if(gms){
+               fBody['gmSecrets'] = gms
+            }else{
+               fBody['gmSecrets'] = " "
+            }
          }
          if( pages[page].name == "Secrets"){
-            fBody['secrets'] =  removeHTML(pages[page].text.content)
+            let sec =  pages[page].text.content
+            if(sec){
+               fBody['secrets'] = sec
+            }else{
+               fBody['secrets'] = " "
+            }
+
          }
       }
 
       fBody['name'] =data.data.name
-      fBody['briefSummary'] = 'Upload From Foundry'
       fBody['concept']= 'Character'
 
       return fBody
@@ -99,7 +133,11 @@
             formattedBody = formattedBody.join('&');
             console.log(formattedBody)
             // const campaign = await axios.get("https://www.scabard.com/api/v0/campaign", {headers: {"accessKey": accessKey, "username":username}})
-            const response = await axios.post(`https://www.scabard.com/api/v0/campaign/1038131/character/2473526`,formattedBody,{ headers: { username: username, accessKey: accessKey, "content-type": "application/x-www-form-urlencoded"  }})
+            const response = await axios.post(`https://www.scabard.com/api/v0${uri}`,formattedBody,{ headers: { username: username, accessKey: accessKey, "content-type": "application/x-www-form-urlencoded"  }})
+            if(response && response.status === 200){
+               uploaded = true
+               application.close();
+            }
         }catch(err){
             console.error(err)
         }
@@ -119,6 +157,7 @@
        <h1>Upload To Scabard</h1>
     </nav>
     <main>
+      {#if uploaded} <span>Upload Successful</span> {/if}
       <button on:click={handleClick}>Upload</button>
     </main>
  </div>

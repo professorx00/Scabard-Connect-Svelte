@@ -15,6 +15,7 @@
     "@typhonjs-fvtt/runtime": "0.1.2",
     "@typhonjs-fvtt/svelte-standard": "0.1.0",
     "axios": "^1.5.1",
+    "string-strip-html": "^13.4.3",
     "svelte": "^4.2.0"
   },
   "devDependencies": {
