@@ -1,3 +1,5 @@
+
+
 const getImages = async (data) => {
    return data.main.imageURL;
 };
@@ -23,42 +25,48 @@ async function _updateExistingEntry(entry, pages, data, isSecret) {
    // Update the entry
    try {
       const Jpages = entry.pages;
-      console.log("isSecret", isSecret);
-      console.log("data", data);
       let newPages = [];
-      Jpages.forEach((h) => {
+      Jpages.forEach((h,i) => {
          if (h.flags.scabard) {
             let id = h._id;
             let name = h.name;
             console.log("Names", h.name);
             switch (name) {
+               case "Brief Summary":
+                  newPages.push({
+                     _id: id,
+                     name: h.name,
+                     ownership: { default: isSecret ? 0 : -1 },
+                     ...pages[i],
+                  });
+                  break;
                case "Description":
                   newPages.push({
                      _id: id,
                      name: h.name,
                      ownership: { default: isSecret ? 0 : -1 },
-                     ...pages[0],
+                     ...pages[i],
                   });
                   break;
                case "Secrets":
                   newPages.push({
                      _id: id,
                      ownership: { default: 0 },
-                     ...pages[1],
+                     ...pages[i],
                   });
                   break;
                case "GM Secrets":
                   newPages.push({
                      _id: id,
                      ownership: { default: 0 },
-                     ...pages[2],
+                     ...pages[i],
                   });
                   break;
                case "Image":
                   newPages.push({
                      _id: id,
                      ownership: { default: isSecret ? 0 : -1 },
-                     ...pages[3],
+                     ...pages[i],
                   });
                   break;
                default:
@@ -70,6 +78,7 @@ async function _updateExistingEntry(entry, pages, data, isSecret) {
                      text: h.text,
                      flags: h.flags,
                      ownership: { default: isSecret ? 0 : -1 },
+                     ...pages[i],
                   });
                   break;
             }
@@ -83,17 +92,17 @@ async function _updateExistingEntry(entry, pages, data, isSecret) {
    }
 }
 
-const createPages = async (data, id, uri, imageURL, mapURL, isSecret) => {
-   const pageContent = [data.main.description, data.main.secrets, data.main.gmSecrets];
+const createPages = async (data, id, uri, imageURL,isSecret, concept,mapURL) => {
+   const pageContent = [data.main.briefSummary,data.main.description, data.main.secrets, data.main.gmSecrets];
    let pages = [];
    for (let i = 0; i < pageContent.length; i++) {
       // Text, Image,PDF,Video
       let newPage = {
          id: id,
-         name: ["Description", "Secrets", "GM Secrets"][i],
+         name: ["Brief Summary","Description", "Secrets", "GM Secrets" ][i],
          type: "text",
          text: { content: pageContent[i] },
-         flags: { scabard: { id: id, uri: uri } },
+         flags: { scabard: { id: id, uri: uri, concept: concept } },
          ownership: i === 0 ? { default: isSecret ? 0 : -1 } : { default: 0 },
       };
       pages.push(newPage);
@@ -103,7 +112,7 @@ const createPages = async (data, id, uri, imageURL, mapURL, isSecret) => {
       name: "Image",
       type: "image",
       src: imageURL,
-      flags: { scabard: { id: id, uri: uri } },
+      flags: { scabard: { id: id, uri: uri, concept: concept } },
       ownership: { default: isSecret ? 0 : -1 },
    };
 
@@ -114,7 +123,7 @@ const createPages = async (data, id, uri, imageURL, mapURL, isSecret) => {
          name: "Map",
          type: "image",
          src: mapURL,
-         flags: { scabard: { id: id, uri: uri } },
+         flags: { scabard: { id: id, uri: uri, concept: concept } },
          ownership: { default: isSecret ? 0 : -1 },
       };
       pages.push(mapPage);
@@ -123,10 +132,9 @@ const createPages = async (data, id, uri, imageURL, mapURL, isSecret) => {
    return pages;
 };
 
-const createJournalEntry = async (concept, data, id, uri) => {
+export const createJournalEntry = async (concept, data, id, uri) => {
    // Checks If there is a folder if there is returns else return new
    const isSecret = data.main.isSecret;
-   console.log("isSecret", isSecret);
    let folder = await _findFolder(concept, id);
    if (!folder) {
       console.log("creating Folder");
@@ -138,7 +146,7 @@ const createJournalEntry = async (concept, data, id, uri) => {
    }
    const imageURL = await getImages(data);
    const mapURL = await getMap(concept, data);
-   const pages = await createPages(data, id, uri, imageURL, mapURL, isSecret);
+   const pages = await createPages(data, id, uri, imageURL, isSecret, concept, mapURL);
 
    //Creates a new Journal Entry which I can render
    let entry = game.journal.find((e) => {
@@ -147,7 +155,6 @@ const createJournalEntry = async (concept, data, id, uri) => {
       }
    });
    if (entry) {
-      console.log("before update", entry);
       return await _updateExistingEntry(entry, pages, data, isSecret);
    }
    let entries = await JournalEntry.createDocuments([
@@ -155,7 +162,7 @@ const createJournalEntry = async (concept, data, id, uri) => {
          id: data.main.id,
          name: data.main.name,
          pages: pages,
-         flags: { scabard: { id: id, uri: uri } },
+         flags: { scabard: { id: id, uri: uri, concept:concept } },
          folder: folder.id,
          ownership: { default: isSecret ? 0 : 2 },
       },
@@ -164,7 +171,30 @@ const createJournalEntry = async (concept, data, id, uri) => {
    return entries[0];
 };
 
-export default createJournalEntry;
+export const saveChangestoScabard = async(concept, data, id, uri, username, accessKey) => {
+
+   const body = {
+      name: 'Test',
+      briefSummary: 'Summary Test',
+      concept: concept.toUpperCase()
+   }
+   let formattedBody = []
+   for(var property in body){
+      var encodedKey = encodeURIComponent(property)
+      var encodedValue = encodeURIComponent(body[property]);
+      formattedBody.push(encodedKey + "=" + encodedValue);
+   }
+
+   formattedBody = formattedBody.join('&');
+
+      console.log(concept)
+      console.log(id)
+      console.log(uri)
+      console.log(data)
+};
+
+
+export default {createJournalEntry: createJournalEntry, saveChangestoScabard: saveChangestoScabard}
 
 
 

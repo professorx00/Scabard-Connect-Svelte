@@ -1,50 +1,63 @@
-## Scabard-Connect 
-
-* **Author**: professorx00#3929
-* **Version**: 1.0.0
-* **Foundry VTT Compatibility**: v10
-* **System Compatibility**: Universal
-
-### Link(s) to Module
-* [https://github.com/professorx00/Scabard-Connect-Svelte](https://github.com/professorx00/Scabard-Connect-Svelte)
-
-### Description
-The Scabard-Connect Foundry Module makes it easy to connect your Foundry Virtual Tabletop to your RPG campaign on [http://scabard.com/pbs](http://www.scabard.com)
-
-Scabard is an easy to use RPG Campaign Manager. With innovative features like connections, auto-linking, the Proper Noun Detector, and Ask Alejandro, an AI-Assist Bard.
-
-<p>With this module, you can keep your players engaged and up-to-date with your campaigns in one central location.
+![template-svelte-esm](https://i.imgur.com/rmfWSrs.jpg)
 
 
-## Installation
-### Method 1
-* Open the Foundry application and click **"Install Module"** in the **"Add-On Modules"** tab.
-* Paste the following link: https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.0.0/module.json
-* Click "Install"
-* Activate the module in your World using **Manage Modules** under the **Game Settings** tab.
+[![TyphonJS Discord](https://img.shields.io/discord/737953117999726592?label=TyphonJS%20Discord)](https://discord.gg/mnbgN8f)
+[![Twitch](https://img.shields.io/twitch/status/typhonrt?style=social)](https://www.twitch.tv/typhonrt)
+[![Code Style](https://img.shields.io/badge/code%20style-allman-yellowgreen.svg?style=flat)](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
+[![License](https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat)](https://github.com/typhonjs-fvtt-demo/template-svelte-esm/blob/main/LICENSE)
 
+Provides a bare-bones Foundry module template repo to get set up with using
+[TyphonJS Runtime Library](https://github.com/typhonjs-fvtt-lib/typhonjs) and [Svelte](https://svelte.dev/) on
+[Foundry VTT](https://foundryvtt.com/) with ES Modules.
 
-## Usage
-###
-* Go to the Journals Tab and Click on the Scabard Logo
-* It will ask for your Access Key which can be found in your user profile in scabard under the triangle next your name<br/>
-<img src="https://raw.githubusercontent.com/professorx00/Scabard-Connect-Svelte/main/public/APIAccessToken.png" /><br/>
-<strong> <span style="color: red;"> API key is only good for 24 hours. You will have to redo it ever 24 Hours </span></strong>
+Triple licensed under the [CC0](https://github.com/typhonjs-fvtt-demo/template-svelte-esm/blob/main/LICENSE-CC0), 
+[MIT](https://github.com/typhonjs-fvtt-demo/template-svelte-esm/blob/main/LICENSE-MIT), or 
+[Unlicense](https://github.com/typhonjs-fvtt-demo/template-svelte-esm/blob/main/LICENSE-UNLICENSE). This repo is 
+intended as public domain / freely available starter code that you can use for any project you choose and licensed 
+however you see fit with no restrictions.
 
-* Enter API Access Key and you Username for Scabard
-* Select which campaign you want to open
-* Choose which Scabard type that you want. You can search using the Search Bar on that tab. 
-* To import the entry click the <img src="https://github.com/professorx00/Scabard-Connect-Svelte/blob/main/public/importButtonPreview.png?raw=true" /> the system will already look to see if it exist in the Scabard folder then update if need be or add it if need be. 
-* You also have the ability to open a new window directly to Scabard so that you can edit the entry. Using the <img src="https://github.com/professorx00/Scabard-Connect-Svelte/blob/main/public/OpenScabardButton.png?raw=true" /> Scabard Button. 
+## About:
+Getting started with a new library or development methodology can be difficult. This template repo contains a 
+bare-bones setup suitable to start working on your own module. Certainly do check out 
+[Essential Svelte (ESM)](https://github.com/typhonjs-fvtt-demo/essential-svelte-esm) for more involved demos that show specific 
+concepts available with Svelte and TRL. Please stop by the 
+[![TyphonJS Discord](https://img.shields.io/discord/737953117999726592?label=TyphonJS)](https://discord.gg/mnbgN8f)
+Discord server to ask any questions.
 
-### Known Bugs
+## Installation (Requires Foundry VTT version 10):
+1. Create your version of the template in a new repo by clicking on the "template" button above. In this process rename
+the repo to your new module name.
+2. Use WebStorm or VSCode to clone your repo into the Foundry VTT data / modules directory (make sure to keep the name
+of your repo as the folder installed in your module directory).
+3. Modify the module `id` in `module.json` to match your new Foundry package ID.
+4. You may of course also change the title of the module in `module.json` to your new module name.
+5. In `./vite.config.mjs` update `s_PACKAGE_ID` which references `modules/template-svelte-esm` to your new module ID. 
+in step #3 above. Also provide a short unique hash ID for `s_SVELTE_HASH_ID`; suggestion: base it off your package ID.
+6. Open in your IDE or via command line and proceed to run `npm install`
+7. Run the NPM script `build` to create the production bundle or `dev` to run in developer mode which uses `esbuild` & 
+HMR (hot module replacement) to dynamically update your running module in real time for all Svelte related components.   
+8. Restart Foundry VTT. This is necessary for Foundry to load the new module.
+9. You should now have a new module installed `Template Svelte (ESM)` or whatever title you set in step #4 visible in 
+your modules list.
+10. Launch a game / world of your choice.
+11. Enable your new module under `Manage Modules`.
+12. On reload the basic application will appear instantly as it is rendered in the `ready` Foundry hook from the entry 
+point: [./src/index.js](https://github.com/typhonjs-fvtt-demo/template-svelte-esm/blob/main/src/index.js)
 
-* It currently places Main section, Secrets, GM Secrets, and Image into pages named: Description, Secrets, GM Secrets, Image. You can change these but it will not update. It is on the TODO to make sure it updates even not looking at the title.
+## What Is Happening Here?
+Not a lot as this is a bare-bones setup allowing you to further modify this module to your own liking. It provides
+the basic build setup and a "dummy" SvelteApplication instance. The best thing to do is to change your repo name to the 
+ID of your new module and update `id` in `module.json` to match your new module ID. 
 
+## About the TyphonJS Runtime Library:
+The TyphonJS Runtime Library (TRL) brings an exciting new library resource for all Foundry VTT developers to build
+advanced modules and game systems using Svelte. A Svelte UI component library built for Foundry and extensions to the
+core Foundry UI / Application framework make it easy to create declarative Svelte based UIs in a method familiar to
+Foundry VTT developers. The core UI component framework contains reactive "application shells" that provide an enhanced
+ability to control your UI / window experience including intro and outro transitions along with support key UI elements
+like context menus and a new backward compatible and API compliant Dialog component that features a modal dialog option.
 
-## Change Log
-
-**Version 1.0.0**
-
-Initial release version.
-
+TRL is innovative as it delivers a runtime library module for Foundry that packages up the runtime in a way that
+can be shared across any number of modules / game systems utilizing it thereby saving a lot of space in any given
+module or game system. Optionally, it is possible to also bundle TRL directly into your module or game system. The TRL
+is both a Foundry library module and an NPM package providing the development dependency utilized for code 

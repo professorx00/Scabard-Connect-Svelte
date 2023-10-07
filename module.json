@@ -1,25 +1,31 @@
 {
   "id": "scabardconnect",
   "title": "Scabard Connect",
-  "description": "Provides a way to import Scabard Documents into Foundry",
-  "author": "David Ward",
+  "description": "Provides a bare-bones Foundry module template repo to get set up with using the TyphonJS Runtime Library and Svelte with ES Modules.",
+  "version": "1.6.0",
   "authors": [
     {
       "name": "David Ward",
-      "url": "https://github.com/professorx00/"
+      "url": "https://www.grimwood.games",
+      "discord": "grimwood_games"
     }
   ],
-  "url": "https://github.com/professorx00/Scabard-Connect-Svelte",
-  "readme": "https://github.com/typhonjs-fvtt-demo/template-svelte-esm/blob/master/README.md",
-  "bugs": "https://github.com/professorx00/Scabard-Connect-Svelte/issues",
-  "changelog": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/latest/",
-  "version": "1.5.0",
   "compatibility": {
-    "minimum": 10,
-    "verified": "11.307"
+    "minimum": "10",
+    "verified": "11"
   },
-  "esmodules": ["./dist/scabardconnect.js"],
-  "styles": ["./dist/scabardconnect.css"],
+  "esmodules": [
+    "index.js"
+  ],
+  "styles": [
+    "style.css"
+  ],
+  "flags": {
+    "hotReload": {
+      "extensions": ["json"],
+      "paths": ["lang"]
+    }
+  },
   "languages": [
     {
       "lang": "en",
@@ -27,15 +33,14 @@
       "path": "lang/en.json"
     }
   ],
-  "relationships": {
-    "systems": [],
-    "requires": []
-  },
   "socket": false,
-  "manifest": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.5.0/module.json",
-  "download": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.5.0/scabardconnect.zip",
+  "url": "https://github.com/professorx00/Scabard-Connect-Svelte",
+  "readme": "https://github.com/professorx00/Scabard-Connect-Svelte/main/README.md",
+  "bugs": "https://github.com/professorx00/Scabard-Connect-Svelte/issues",
+  "changelog": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/tag/1.6.0",
+  "manifest": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.6.0/module.json",
+  "download": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.6.0/scabardconnect.zip",
   "protected": false,
   "coreTranslation": false,
   "library": false
-
 }

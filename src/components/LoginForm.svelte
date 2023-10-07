@@ -55,7 +55,7 @@ const submitHandler = async ()=>{
 <form on:submit|preventDefault={submitHandler}>
     <div class="inputs">
         <label for={accessKey}>Access Key</label>
-        <input class="usernameInput" id="accessKeyInput" bind:value={accessKey} />
+        <input class="usernameInput" id="accessKeyInput" type="password" bind:value={accessKey} />
     </div>
     <div class="inputs">
         <label for={username}>Username </label>

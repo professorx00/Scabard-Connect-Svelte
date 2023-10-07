@@ -1,38 +1,37 @@
 {
-  "name": "scabardconnect",
-  "description": "Provides a way to import Scabard content into Foundry VTT",
+  "description": "Provides a bare-bones Foundry module template repo to get set up with using the TyphonJS Runtime Library and Svelte with ES Modules.",
   "license": "MIT",
   "private": true,
   "type": "module",
-  "author": "programmingdad",
+  "author": "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)",
   "contributors": [
     "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)"
   ],
+  "imports": {
+    "#runtime/*": "@typhonjs-fvtt/runtime/*",
+    "#standard/*": "@typhonjs-fvtt/svelte-standard/*"
+  },
   "dependencies": {
-    "@typhonjs-fvtt/runtime": "^0.0.8",
-    "axios": "^0.26.1",
-    "moment": "^2.29.3",
-    "node-fetch": "^3.2.3",
-    "svelte": "^3.46.0",
-    "svelte-preprocess": "^4.10.0"
+    "@typhonjs-fvtt/runtime": "0.1.2",
+    "@typhonjs-fvtt/svelte-standard": "0.1.0",
+    "axios": "^1.5.1",
+    "string-strip-html": "^13.4.3",
+    "svelte": "^4.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7",
-    "@babel/preset-env": "^7",
-    "@rollup/plugin-babel": "^5",
-    "@typhonjs-config/eslint-config": "^0.3.0",
+    "@typhonjs-config/eslint-config": "^0.6.0",
     "@typhonjs-fvtt/eslint-config-foundry.js": "^0.8.0",
     "eslint": "^8",
-    "rollup": "^2"
+    "svelte-preprocess": "^5",
+    "vite": "^4.4.0"
   },
   "browserslist": [
     ">5%",
     "not IE 11"
   ],
   "scripts": {
-    "build": "rollup --config",
-    "build-watch": "rollup --watch --config",
+    "build": "vite build",
+    "dev": "vite",
     "eslint": "eslint ."
   }
 }
-

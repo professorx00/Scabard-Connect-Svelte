@@ -1,19 +1,20 @@
 <script>
     import ConceptCards from './ConceptCards.svelte';
-    import createJournalEntry from '../scripts/journal'
+    import {createJournalEntry} from '../scripts/journal'
     import { TJSDialog } from '@typhonjs-fvtt/runtime/svelte/application';
 
     import UserStores from '../stores/UserStores'
+
     import Tabs from '../shared/Tabs.svelte';
-import { onMount } from 'svelte';
+    import { onMount } from 'svelte';
     export let username = '';
     export let accessKey = '';
     export let campaigns = null;
     export let step = 0;
-
     export let selectedCampaign;
     export let selectedCampaignDetails;
     export let dataStore;
+
     let loading = false;
     let tabs = [
         'Adventures',
@@ -46,6 +47,7 @@ import { onMount } from 'svelte';
         selectedCampaign= value.selectedCampaign
         selectedCampaignDetails =value.selectedCampaignDetails
     })
+
     const tabChange=(e)=>{
         activeTab = e.detail;
     }
@@ -60,7 +62,6 @@ import { onMount } from 'svelte';
         vehiclesData = selectedCampaignDetails.rows.filter((item)=>item.concept==="Vehicle")
         notesData = selectedCampaignDetails.rows.filter((item)=>item.concept==="Note")
     })
-
 
        document.addEventListener("addScabardJournal", (async e=>{
         e.stopImmediatePropagation()
