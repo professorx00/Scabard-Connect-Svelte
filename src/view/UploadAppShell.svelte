@@ -158,6 +158,7 @@
     </nav>
     <main>
       {#if uploaded} <span>Upload Successful</span> {/if}
+      <span style="color: red">This upload to Scabard will not update images and possible not update if there are inline images in description, secret, or gm secrets. Please be advise we are working on a solution but have not come up with one yet. </span>
       <button on:click={handleClick}>Upload</button>
     </main>
  </div>
@@ -176,6 +177,8 @@
        height: "auto";
        width: "auto";
        margin: 0 0;
+       flex-direction: column;
+       justify-content: center;
     }
     nav{
        text-align: center;
