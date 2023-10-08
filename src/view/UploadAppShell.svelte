@@ -72,9 +72,9 @@
     }
 
     const formatBody = (data, concept)=>{
+      console.log(concept)
       let fBody = {}
       let pages = data.data.pages
-      console.log(pages)
       for(let page in pages){
          if(pages[page].name =="Brief Summary"){
             let bsum = pages[page].text.content
@@ -86,6 +86,11 @@
             
          }
          if( pages[page].name == 'Description'){
+            if(pages[page].ownership.default === 0){
+               fBody['isSecret'] = "true"
+            }else{
+               fBody['isSecret'] = "false"
+            }
             let des =  pages[page].text.content
             if(des){
                fBody['description'] = des
@@ -113,7 +118,7 @@
       }
 
       fBody['name'] =data.data.name
-      fBody['concept']= 'Character'
+      fBody['concept']= concept.charAt(0).toUpperCase() + concept.slice(1);
 
       return fBody
     }

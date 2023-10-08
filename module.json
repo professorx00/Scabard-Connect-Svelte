@@ -2,7 +2,7 @@
   "id": "scabardconnect",
   "title": "Scabard Connect",
   "description": "Provides a bare-bones Foundry module template repo to get set up with using the TyphonJS Runtime Library and Svelte with ES Modules.",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "authors": [
     {
       "name": "David Ward",
@@ -37,9 +37,9 @@
   "url": "https://github.com/professorx00/Scabard-Connect-Svelte",
   "readme": "https://github.com/professorx00/Scabard-Connect-Svelte/main/README.md",
   "bugs": "https://github.com/professorx00/Scabard-Connect-Svelte/issues",
-  "changelog": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/tag/1.6.0",
-  "manifest": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.6.0/module.json",
-  "download": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.6.0/scabardconnect.zip",
+  "changelog": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/tag/1.6.2",
+  "manifest": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.6.2/module.json",
+  "download": "https://github.com/professorx00/Scabard-Connect-Svelte/releases/download/1.6.2/scabardconnect.zip",
   "protected": false,
   "coreTranslation": false,
   "library": false

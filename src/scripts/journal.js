@@ -24,13 +24,12 @@ async function _findFolder(concept, id) {
 async function _updateExistingEntry(entry, pages, data, isSecret) {
    // Update the entry
    try {
-      const Jpages = entry.pages;
+      const Jpages = entry.toJSON().pages;
       let newPages = [];
       Jpages.forEach((h,i) => {
          if (h.flags.scabard) {
             let id = h._id;
             let name = h.name;
-            console.log("Names", h.name);
             switch (name) {
                case "Brief Summary":
                   newPages.push({
@@ -93,7 +92,7 @@ async function _updateExistingEntry(entry, pages, data, isSecret) {
 }
 
 const createPages = async (data, id, uri, imageURL,isSecret, concept,mapURL) => {
-   const pageContent = [data.main.briefSummary,data.main.description, data.main.secrets, data.main.gmSecrets];
+   const pageContent = [data.main.briefSummary, data.main.description, data.main.secrets, data.main.gmSecrets];
    let pages = [];
    for (let i = 0; i < pageContent.length; i++) {
       // Text, Image,PDF,Video
@@ -103,7 +102,7 @@ const createPages = async (data, id, uri, imageURL,isSecret, concept,mapURL) => 
          type: "text",
          text: { content: pageContent[i] },
          flags: { scabard: { id: id, uri: uri, concept: concept } },
-         ownership: i === 0 ? { default: isSecret ? 0 : -1 } : { default: 0 },
+         ownership: i === 0 || i === 1 ? { default: isSecret ? 0 : -1 } : { default: 0 },
       };
       pages.push(newPage);
    }
@@ -128,7 +127,6 @@ const createPages = async (data, id, uri, imageURL,isSecret, concept,mapURL) => 
       };
       pages.push(mapPage);
    }
-
    return pages;
 };
 
@@ -147,7 +145,6 @@ export const createJournalEntry = async (concept, data, id, uri) => {
    const imageURL = await getImages(data);
    const mapURL = await getMap(concept, data);
    const pages = await createPages(data, id, uri, imageURL, isSecret, concept, mapURL);
-
    //Creates a new Journal Entry which I can render
    let entry = game.journal.find((e) => {
       if (e.flags.scabard) {
@@ -186,11 +183,6 @@ export const saveChangestoScabard = async(concept, data, id, uri, username, acce
    }
 
    formattedBody = formattedBody.join('&');
-
-      console.log(concept)
-      console.log(id)
-      console.log(uri)
-      console.log(data)
 };
 
 
