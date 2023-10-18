@@ -22,6 +22,7 @@
     export let uri;
     export let data;
     export let concept;
+    export let resError = false;
 
     export let uploaded = false;
 
@@ -72,7 +73,6 @@
     }
 
     const formatBody = (data, concept)=>{
-      console.log(concept)
       let fBody = {}
       let pages = data.data.pages
       for(let page in pages){
@@ -136,15 +136,17 @@
             }
             
             formattedBody = formattedBody.join('&');
-            console.log(formattedBody)
-            // const campaign = await axios.get("https://www.scabard.com/api/v0/campaign", {headers: {"accessKey": accessKey, "username":username}})
-            const response = await axios.post(`https://www.scabard.com/api/v0${uri}`,formattedBody,{ headers: { username: username, accessKey: accessKey, "content-type": "application/x-www-form-urlencoded"  }})
-            if(response && response.status === 200){
+            console.log(body)
+            const response = await axios.post(`https://www.scabard.com/api/v0${uri}`,body,{ headers: { username: username, accessKey: accessKey, "content-type": "application/json"  }})
+            if(response && response.data?.isSuccess){
                uploaded = true
                application.close();
+            }else{
+               resError = true;
             }
         }catch(err){
             console.error(err)
+            resError = true;
         }
     }
  
@@ -163,6 +165,7 @@
     </nav>
     <main>
       {#if uploaded} <span>Upload Successful</span> {/if}
+      {#if resError} <span style="color: red">Upload Failed</span> {/if}
       <span style="color: red">This upload to Scabard will not update images and possible not update if there are inline images in description, secret, or gm secrets. Please be advise we are working on a solution but have not come up with one yet. </span>
       <button on:click={handleClick}>Upload</button>
     </main>
